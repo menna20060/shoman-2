@@ -34,7 +34,7 @@ dt{color:rgba(255,255,255,.8)}
 /* =====================================================================
    FX layer: scroll progress, parallax, header tuck, card spotlight, softer reveals
    ===================================================================== */
-.shoman-progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:200;pointer-events:none;transform:scaleX(0);transform-origin:left;background:linear-gradient(90deg,#8b7cff,#ff8fb1)}
+.shoman-progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:200;pointer-events:none;transform:scaleX(0);transform-origin:left;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
 html[dir="rtl"] .shoman-progress{transform-origin:right}
 /* section videos drift slower than the page; hero content eases out */
 html.fx .sec>.vb{transform:translate3d(0,var(--py,0px),0) scale(1.1)!important;will-change:transform}
@@ -60,7 +60,7 @@ html.leaving body{opacity:1!important;transition:none!important}
 .shoman-curtain{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;pointer-events:all;
   background:radial-gradient(120% 90% at 50% 100%,#2a2150 0%,#0b0a14 55%,#000 100%);
   clip-path:inset(100% 0 0 0);transition:clip-path .62s cubic-bezier(.76,0,.24,1)}
-.shoman-curtain::after{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,#8b7cff,#ff8fb1);transform:scaleX(0);transform-origin:left;transition:transform .9s cubic-bezier(.22,1,.36,1) .15s}
+.shoman-curtain::after{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transform:scaleX(0);transform-origin:left;transition:transform .9s cubic-bezier(.22,1,.36,1) .15s}
 .shoman-curtain span{font:italic 400 clamp(2.2rem,7vw,4.5rem)/1 'Instrument Serif','Cairo',serif;letter-spacing:-.02em;color:#fff;opacity:0;transform:translateY(24px);transition:opacity .45s ease .2s,transform .6s cubic-bezier(.22,1,.36,1) .2s}
 .shoman-curtain.in{clip-path:inset(0 0 0 0)}
 .shoman-curtain.in::after{transform:scaleX(1)}
@@ -72,14 +72,14 @@ html.leaving body{opacity:1!important;transition:none!important}
 
 /* 3D tilt on cards (spotlight already follows the pointer) */
 html.fx :is(.card,.pc,.pcard):hover{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-5px) scale(1.012)!important;
-  transition:transform .14s ease-out,background-color .3s ease,border-color .3s ease,box-shadow .4s ease!important;
-  box-shadow:0 24px 50px -18px rgba(139,124,255,.35),inset 0 1px 1px rgba(255,255,255,.15)}
+  transition:transform .14s ease-out,background-color .3s ease,border-color .3s ease,box-shadow .8s cubic-bezier(.22,1,.36,1)!important;
+  box-shadow:0 18px 40px -22px rgba(232,201,184,.15),inset 0 1px 1px rgba(255,255,255,.1)}
+html.js.fx :is(.card,.pc,.pcard).rise{transition:opacity 1s var(--ease),transform .5s var(--ease),filter 1s var(--ease),background-color .3s ease,border-color .3s ease,box-shadow .8s var(--ease)}
 html.fx :is(.card,.pc,.pcard){will-change:transform}
 
 /* media frames lean slightly with scroll speed; hover zoom on their video/image */
-html.fx .media{transform:skewY(var(--sk,0deg));transition:transform .2s linear}
-.media>*{transition:transform 1.2s cubic-bezier(.22,1,.36,1)}
-.media:hover>*{transform:scale(1.05)}
+html.fx .media{transform:none;isolation:isolate;clip-path:inset(0 round 1rem)}
+.media>.vb,.media:hover>.vb{transform:none!important;transition:none}
 
 /* hero leans toward pointer (translate property, so it never fights the scroll transform) */
 
@@ -108,7 +108,7 @@ html.fx .hv.hv-in{opacity:1;transform:none;filter:none}
 /* nav links: underline draws in from the middle */
 
 /* gentle focus on everything that scrolls into place */
-::selection{background:rgba(139,124,255,.45);color:#fff}
+::selection{background:rgba(232,201,184,.85);color:#1c1411}
 
 @media(prefers-reduced-motion:reduce){.shoman-curtain{display:none}html.fx .hv:not(.hv-in){opacity:1;transform:none;filter:none}html.fx .media{transform:none}html.fx :is(.card,.pc,.pcard):hover{transform:none!important}#home .hin{translate:none}}
 
@@ -294,3 +294,21 @@ footer p{max-width:36rem}
 
 /* theater page strip: a touch slower */
 .mq.mq-slow .mq-t{animation-duration:44s}
+
+/* ---------- logo: gear mark + SHOMAN wordmark (EN) / شومان (AR), same box in both ---------- */
+.logo{gap:.7rem}
+.logo .lg-ico{height:1.55rem;width:auto;flex:none;display:block}
+.logo .lg-name{display:inline-flex;align-items:center;height:1.1rem}
+.logo .lg-wm{height:1rem;width:auto;display:block}
+.logo .lg-ar{display:none;font:800 1.2rem/1 'Cairo','Barlow',sans-serif;letter-spacing:0}
+html[lang=ar] .logo .lg-en{display:none}
+html[lang=ar] .logo .lg-ar{display:inline}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media(max-width:400px){.logo .lg-ico{height:1.25rem}.logo .lg-wm{height:.82rem}.logo{gap:.5rem}}
+.logo .lg-ico{will-change:transform}
+@keyframes gearspin{to{transform:rotate(360deg)}}
+.shoman-curtain span{display:block;line-height:0}.shoman-curtain .cg{width:clamp(2.25rem,6vw,3.5rem);height:auto;animation:gearspin 2.4s linear infinite}
+
+/* logo + accent: champagne pink */
+:root{--accent:#E8C9B8;--accent-2:#F6DDD0}
+.logo,.logo .lg-ico{color:#fff}
