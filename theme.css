@@ -312,3 +312,8 @@ html[lang=ar] .logo .lg-ar{display:inline}
 /* logo + accent: champagne pink */
 :root{--accent:#E8C9B8;--accent-2:#F6DDD0}
 .logo,.logo .lg-ico{color:#fff}
+
+/* one-partner section: photos instead of video */
+.media>.mimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.92) saturate(1.05);transition:transform 1.1s cubic-bezier(.22,1,.36,1)}
+.media:hover>.mimg{transform:scale(1.04)}
+@media(prefers-reduced-motion:reduce){.media:hover>.mimg{transform:none}}
