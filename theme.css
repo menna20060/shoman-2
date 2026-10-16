@@ -122,10 +122,175 @@ html.fx .hv.hv-in{opacity:1;transform:none;filter:none}
 .art.pic{background-color:#0b0b10!important;background-image:var(--bgi)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important}
 .art svg,.cimg svg,.pimg svg{display:none!important}
 
-/* nav links: no leftover line/outline after the mouse leaves; dropdown only stays open for keyboard focus */
-.links a,.links .nl,.mnav a{text-decoration:none!important;box-shadow:none}
+
+/* ---------- hero buttons: arrow + play icon point left in Arabic ---------- */
+[dir=rtl] .hbtns .gbtn .ar{transform:rotate(-135deg)}
+[dir=rtl] .hbtns .gbtn .pl{transform:scaleX(-1)}
+
+/* ---------- brands: scrolling logo strip ---------- */
+.part{width:100%}
+.mq{width:100%;max-width:72rem;margin-inline:auto;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.mq-t{display:flex;width:max-content;animation:mq-scroll 32s linear infinite;will-change:transform}
+.mq:hover .mq-t{animation-play-state:paused}
+.mq-g{display:flex;align-items:center;flex:none}
+.mq-i{display:flex;align-items:center;justify-content:center;padding:0 clamp(1.75rem,4vw,3.5rem);color:rgba(255,255,255,.88);opacity:.85;transition:opacity .3s}
+.mq-i:hover{opacity:1}
+.mq-i svg{height:clamp(1.6rem,2.6vw,2.2rem);width:auto;max-width:none}
+@keyframes mq-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.mq-t{animation:none}.mq{overflow-x:auto}}
+
+
+/* ---------- arrows: horizontal, follow reading direction (LTR -> right, RTL -> left) ---------- */
+.btn .ar,.gbtn .ar{transform:rotate(45deg)}
+[dir=rtl] .btn .ar,[dir=rtl] .gbtn .ar{transform:rotate(-135deg)}
+.gbtn .pl{transform:none}
+[dir=rtl] .gbtn .pl{transform:scaleX(-1)}
+
+
+/* Brandfetch logos: white, uniform height */
+.mq-i img.bf{height:clamp(1.6rem,2.6vw,2.2rem);width:auto;max-width:9rem;object-fit:contain;filter:brightness(0) invert(1)}
+
+/* Brandfetch logos keep their original colours; a soft light chip keeps dark logos readable on the video */
+.mq-i img.bf{filter:none;height:clamp(1.5rem,2.4vw,2rem);max-width:8rem}
+.mq-i.has-img{opacity:1;color:inherit}
+.mq-i.has-img img.bf{background:rgba(255,255,255,.94);padding:.55rem .9rem;border-radius:.8rem;box-sizing:content-box}
+
+/* logo strip: brand colours, no chip, always moving (no hover effect) */
+.mq-t,.mq:hover .mq-t{animation-play-state:running!important}
+.mq-i,.mq-i:hover{opacity:1!important;color:#fff;transition:none}
+.mq-i.has-img,.mq-i.has-img img.bf{background:none!important;padding:0!important}
+
+/* Brandfetch PNG logos: original colours, transparent, no chip, no hover */
+.mq-i img.bf{filter:none!important;background:none!important;padding:0!important;border-radius:0;height:clamp(1.6rem,2.6vw,2.2rem);width:auto;max-width:9rem;object-fit:contain;display:block}
+
+/* ---------- brand strip: equal visual size, even spacing, always moving ---------- */
+.mq{--s:1}
+@media(max-width:700px){.mq{--s:.72}}
+.mq-i{padding:0 calc(3.25rem*var(--s))!important}
+.mq-i img,.mq-i svg{display:block;width:auto!important;max-width:none!important;object-fit:contain;filter:none!important;height:calc(var(--h,30px)*var(--s))!important}
+.mq-i[data-b=jbl]{--h:42px}
+.mq-i[data-b=shure]{--h:24px}
+.mq-i[data-b=yamaha]{--h:28px}
+.mq-i[data-b=bose]{--h:17px}
+.mq-i[data-b=sony]{--h:25px}
+
+
+/* =====================================================================
+   NAV  ·  one minimal bar for English + Arabic (identical geometry, no per-language rules)
+   Desktop >=1024: logo | pill bar.  Below 1024: logo | compact bar + menu button.
+   ===================================================================== */
+html.nav-hide header,html.fx.nav-hide header{translate:none!important}
+header{top:.3rem;padding:0 1rem}
+@media(min-width:768px){header{padding:0 2rem}}
+@media(min-width:1024px){header{padding:0 3rem}}
+@media(min-width:1440px){header{padding:0 4rem}}
+
+nav{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+@media(min-width:1024px){nav{display:grid;grid-template-columns:1fr auto 1fr}}
+
+.logo{font-size:1.05rem;font-weight:600;gap:.55rem;white-space:nowrap}
+
+/* the bar: quiet glass, hairline border, no bevel */
+.bar.lg{background:rgba(10,10,12,.78);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.1);box-shadow:none;overflow:visible;
+  padding:.35rem .4rem;padding-inline:.4rem;gap:.5rem}
+.bar.lg::before{display:none}
+@media(min-width:1024px){.bar.lg{padding:.4rem .5rem;padding-inline:3rem .5rem;gap:1.25rem}}
+@media(min-width:1024px){#lang{margin-inline-start:1.25rem}}
+
+/* links: plain text, generous spacing, thin underline for hover / current page */
+.links{gap:clamp(2rem,4vw,4.25rem);align-items:center}
+.links a,.links .nl{background:none!important;border-radius:0;padding:.55rem 0;font-size:.9rem;font-weight:500;
+  line-height:1.4;white-space:nowrap;color:rgba(255,255,255,.68);text-decoration:none!important;box-shadow:none;position:relative}
+.links .nl.on,.links .nl:hover,.has-dd:hover>.nl,.has-dd.open>.nl{color:#fff}
 .links a:focus:not(:focus-visible),.mnav a:focus:not(:focus-visible){outline:none}
-.links a::before,.links a::after{content:none!important}
-.has-dd:focus-within:not(:hover):not(:has(:focus-visible)) .dd{opacity:0;visibility:hidden;pointer-events:none;transform:translateY(8px)}
-.dd{pointer-events:none}
-.has-dd:hover .dd,.has-dd:has(:focus-visible) .dd{pointer-events:auto}
+.links .nl{gap:.4rem}
+.links .nl svg{opacity:.7}
+
+/* right-hand controls */
+.lang{font-size:.82rem;padding:.5rem .8rem;color:rgba(255,255,255,.75)}
+.lang:hover{color:#fff;background:rgba(255,255,255,.08)}
+.bar .btn.sm{padding:.5rem 1.15rem;font-size:.85rem;font-weight:500}
+@media(max-width:1023px){.bar .btn.sm .ar{display:none}}
+.bg.lang{padding:.5rem .65rem}
+
+/* dropdown: closed by default. Opens on real mouse hover, on tap (JS adds .open), or keyboard focus -
+   never from :focus-within, so it can't be left open after a click or tap */
+header .links .has-dd .dd{display:block;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(8px);
+  inset-inline-start:50%;translate:-50% 0;min-width:15.5rem;padding-top:.9rem;
+  transition:opacity .22s ease,transform .22s ease,visibility 0s linear .22s}
+[dir=rtl] header .links .has-dd .dd{translate:50% 0}
+header .links .has-dd.open .dd,
+header .links .has-dd:has(>a:focus-visible) .dd{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition-delay:0s}
+@media(hover:hover) and (pointer:fine){
+  header .links .has-dd:hover .dd{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition-delay:0s}
+}
+header .links .has-dd:not(.open):not(:hover) .nl svg{transform:none}
+.has-dd.open .nl svg,.has-dd:hover .nl svg{transform:rotate(180deg)}
+.dd-in{border-radius:1rem;padding:.5rem;background:rgba(12,12,14,.985);border:1px solid rgba(255,255,255,.09);box-shadow:0 18px 40px -12px rgba(0,0,0,.6)}
+.dd-in::before{display:none}
+.links .dd a{padding:.65rem 1rem;border-radius:.65rem;font-size:.86rem;color:rgba(255,255,255,.75);white-space:normal}
+.links .dd a:hover,.links .dd a:focus-visible{background:rgba(255,255,255,.08);color:#fff}
+.links .dd a.all{color:#fff;border-bottom:1px solid rgba(255,255,255,.08);border-radius:.65rem .65rem 0 0;margin-bottom:.25rem}
+.links .dd a::after{content:none}
+
+/* below 1024: links collapse into the menu button */
+@media(max-width:1023px){
+  .links{display:none}
+  .bg{display:inline-flex}
+  .mnav{display:none!important}
+  .mnav.on{display:flex!important}
+}
+@media(min-width:1024px){.bg{display:none}.mnav{display:none!important}}
+
+/* mobile / tablet menu */
+.mnav{margin-top:.5rem;padding:.6rem;border-radius:1.25rem;background:rgba(10,10,12,.985);
+  border:1px solid rgba(255,255,255,.09);max-height:calc(100svh - 5rem);overflow-y:auto;overscroll-behavior:contain;
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.mnav::before{display:none}
+.mnav a{border-radius:.75rem;padding:.8rem 1rem;font-size:.95rem;color:rgba(255,255,255,.8)}
+.mnav a.on{background:rgba(255,255,255,.08);color:#fff}
+.mnav .mrow{display:flex;align-items:stretch}
+.mnav .mrow>a{flex:1}
+.mnav .mtog{background:none;border:0;color:rgba(255,255,255,.7);padding:0 1rem;border-radius:.75rem;cursor:pointer;display:flex;align-items:center}
+.mnav .mtog svg{width:1rem;height:1rem;transition:transform .25s ease}
+.mnav .mtog[aria-expanded=true] svg{transform:rotate(180deg)}
+.mnav .msub{display:none;flex-direction:column;margin:.1rem 0 .3rem;padding-inline-start:1rem;border-inline-start:1px solid rgba(255,255,255,.1);margin-inline-start:1.1rem}
+.mnav .msub.on{display:flex}
+.mnav a.sub{padding:.6rem 1rem;font-size:.86rem;color:rgba(255,255,255,.62)}
+
+/* soft scrim so page text never collides with the logo / bar while scrolling */
+header::before{content:"";position:fixed;inset:0 0 auto 0;height:5rem;z-index:-1;pointer-events:none;
+  background:linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,0))}
+
+/* =====================================================================
+   FOOTER + SECTIONS  ·  responsive tidy-up (same in EN / AR)
+   ===================================================================== */
+.pgs{gap:.9rem 2.25rem;margin-top:3rem;padding-inline:1rem}
+.soc{gap:.75rem;margin-top:2rem}
+footer{gap:1.25rem;text-align:center}
+footer nav{gap:1.75rem;flex-wrap:wrap;justify-content:center}
+footer p{max-width:36rem}
+@media(min-width:640px){footer{text-align:start}}
+@media(max-width:767px){
+  footer{margin-top:4rem;padding-top:1.5rem}
+  .cl{gap:.6rem 1.5rem;margin-top:1.5rem;padding-inline:.5rem}
+  .cl span{max-width:100%;overflow-wrap:anywhere}
+  .pgs{gap:.8rem 1.75rem;margin-top:2.25rem}
+}
+@media(max-width:380px){.pgs{gap:.7rem 1.25rem;font-size:.82rem}.cl{font-size:.82rem}}
+
+/* brand strip: brand colours, one optical size system (EN + AR) */
+.mq-i[data-b=christie]{--h:20px}
+.mq-i[data-b=dts]{--h:30px}
+.mq-i[data-b=pioneer]{--h:21px}
+.mq-i[data-b=soundcraft]{--h:24px}
+.mq-i[data-b=dbx]{--h:34px}
+.mq-i[data-b=jbl]{--h:42px}
+.mq-i.tx{font:600 calc(1.35rem*var(--s)) 'Barlow',system-ui,sans-serif;letter-spacing:.06em;color:#fff;white-space:nowrap}
+.mq-i[data-b=christie] img{filter:brightness(1.5) saturate(1.1)!important}
+
+/* theater page strip: a touch slower */
+.mq.mq-slow .mq-t{animation-duration:44s}

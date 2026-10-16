@@ -2,6 +2,38 @@
 (function () {
   var root = document.documentElement;
 
+  /* ---- nav: dropdown + mobile menu state (registered first so it runs before the page curtain click handler) ---- */
+  var FINE = false; try { FINE = matchMedia('(hover:hover) and (pointer:fine)').matches; } catch (e) {}
+  function closeDD(except) {
+    [].forEach.call(document.querySelectorAll('.has-dd.open'), function (d) { if (d !== except) d.classList.remove('open'); });
+  }
+  function closeMenu() {
+    var m = document.getElementById('mnav'), b = document.getElementById('bg');
+    if (m) m.classList.remove('on'); if (b) b.setAttribute('aria-expanded', 'false');
+  }
+  window.addEventListener('click', function (e) {
+    var t = e.target; if (!t || !t.closest) return;
+    var tog = t.closest('.mtog');
+    if (tog) {
+      e.preventDefault(); e.stopImmediatePropagation();
+      var sub = tog.parentNode.nextElementSibling, on = !tog.getAttribute('aria-expanded') || tog.getAttribute('aria-expanded') === 'false';
+      tog.setAttribute('aria-expanded', on ? 'true' : 'false'); if (sub) sub.classList.toggle('on', on);
+      return;
+    }
+    var dd = t.closest('.has-dd'), trig = dd && t.closest('.has-dd > a.nl');
+    /* touch / no-hover devices: first tap opens the menu instead of navigating */
+    if (trig && !FINE) {
+      e.preventDefault(); e.stopImmediatePropagation();
+      closeDD(dd); dd.classList.toggle('open'); return;
+    }
+    if (!dd) closeDD();
+    if (!t.closest('header')) closeMenu();
+  }, true);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeDD(); closeMenu(); } });
+  window.addEventListener('scroll', function () { closeDD(); }, { passive: true });
+  window.addEventListener('resize', function () { closeDD(); if (innerWidth >= 1024) closeMenu(); });
+  window.addEventListener('pageshow', function () { closeDD(); closeMenu(); });
+
   /* ---- page curtain: arriving side (runs immediately, before first paint of the body) ---- */
   var REDUCE = false; try { REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches; } catch (e) {}
   function makeCurtain() {
@@ -117,7 +149,7 @@
       var y = window.scrollY, hd = document.querySelector('header');
       if (hd) {
         var open = hd.matches(':hover,:focus-within') || document.querySelector('.mnav.on');
-        var hide = y > 240 && y > lastY + 2 && !open;
+        var hide = false; /* header stays fixed, never tucks away */
         if (hide !== hid && (hide || y < lastY - 2 || y <= 240)) { hid = hide; root.classList.toggle('nav-hide', hide); }
       }
       lastY = y;
